@@ -1,34 +1,32 @@
-# clicker
+# Quetrino - Basic Clicker
 
-## Project setup
-```
-yarn install
-```
+Actual app version: 0.1.0
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
-```
+This clicker is created in Vue JS framework. It's very simple app without store and routering.
+Routering will be add in future and App will be upgrade to version 0.2.0
 
-### Compiles and minifies for production
-```
-yarn run build
-```
+## Version 0.1.0:
 
-### Run your tests
-```
-yarn run test
-```
+Added a simple function:
+ - AutoClicker
+ - Double Click upgrade
+ - Clicker
 
-### Lints and fixes files
-```
-yarn run lint
-```
+Without options side.
 
-### Run your unit tests
-```
-yarn run test:unit
-```
+## Version: 0.2.0:
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Will be added:
+ - More upgrade options
+ - Options side
+ - Routering
+ - Upgrade app design
+
+Next upgrade date: 9th November 2018.
+
+``
+If you want to help me in this project contact with me at gmail.com.
+My mail: quetrino@gmail.com!
+``
+
+## END OF README.md

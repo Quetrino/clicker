@@ -21,12 +21,22 @@
             Możesz kupować to ulepszenie do znudzenia, lecz za każdym razem jego cena
             będzie podwajana.
           </p>
-          <span class="price">
+          <p class="price">
             Aktulana cena: {{ valuePrice[0] }}{{ valueChar }}
-          </span>
+          </p>
+          <button @click="buy('doubleclick')">Buy it</button>
         </div>
         <div class="option">
-          <h1>Zwiększenie mnożnika</h1>
+          <h1>Automatyczny klikacz</h1>
+          <p>
+            <strong>Automatyczny klikacz</strong> zarabia za ciebie automatycznie. Co sekundę
+            do twojego portfela trafia wartość jednego kliknięcia. Za każdym razem, gdy go
+            zakupisz jego cena będzie wzrastała dwukrotnie!
+          </p>
+          <p class="price">
+            Aktualna cena: {{ valuePrice[1] }}{{ valueChar }}
+          </p>
+          <button @click="buy('autoclick')">Buy it</button>
         </div>
       </div>
     </div>
@@ -40,11 +50,23 @@
 import $ from 'jquery';
 import Additionals from './components/Additionals.vue';
 
-let appValue = 40000000;
+let appValue = 250;
 if (localStorage.getItem('value')) {
   appValue = JSON.parse(localStorage.getItem('value'));
 }
-const incrementValue = 10000000;
+let incrementValue = 1;
+if (localStorage.getItem('increment')) {
+  incrementValue = JSON.parse(localStorage.getItem('increment'));
+}
+let shopping = [100, 250];
+if (localStorage.getItem('shopping')) {
+  shopping = JSON.parse(localStorage.getItem('shopping'));
+}
+
+let autoClicker = false;
+if (localStorage.getItem('autoClicker')) {
+  autoClicker = JSON.parse(localStorage.getItem('autoClicker'));
+}
 const valueLetters = ['k', 'M', 'B'];
 export default {
   name: 'App',
@@ -53,18 +75,22 @@ export default {
   },
   data() {
     return {
-      value: 0,
+      value: appValue,
       valueChar: '$',
       valueAfter: 0,
       valueLetter: null,
       seen: false,
       addsActive: false,
       optsActive: false,
-      valuePrice: [100],
+      valuePrice: [shopping[0], shopping[1]],
+      autoClickActive: autoClicker,
     };
   },
   created() {
     this.setValue();
+    if (this.autoClickActive === true) {
+      this.autoClicker();
+    }
   },
   methods: {
     addsClicked() {
@@ -97,6 +123,9 @@ export default {
       this.value = appValue;
       this.setValue();
       localStorage.clear();
+      localStorage.setItem('shopping', JSON.stringify(this.valuePrice));
+      localStorage.setItem('increment', JSON.stringify(incrementValue));
+      localStorage.setItem('autoClicker', JSON.stringify(this.autoClickActive));
       localStorage.setItem('value', JSON.stringify(appValue));
     },
     setValue() {
@@ -116,6 +145,26 @@ export default {
         }
       }
       this.value = appValue;
+    },
+    buy(item) {
+      if (item === 'doubleclick') {
+        appValue -= this.valuePrice[0];
+        this.valuePrice[0] *= 2;
+        incrementValue *= 2;
+        this.setValue();
+      } else if (item === 'autoclick') {
+        appValue -= this.valuePrice[1];
+        this.valuePrice[1] *= 2;
+        this.autoClickActive = true;
+        this.setValue();
+        this.autoClicker();
+      }
+    },
+    autoClicker() {
+      setInterval(() => {
+        this.increment();
+        this.setValue();
+      }, 1000);
     },
   },
 };
@@ -203,6 +252,12 @@ button:focus {
 
       p {
         font-size: 2vh;
+      }
+
+      .price {
+        margin-top: 1vh;
+        font-size: 2vh;
+        line-height: 2vh;
       }
 
       &:hover, &:focus {
